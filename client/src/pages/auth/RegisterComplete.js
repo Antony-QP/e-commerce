@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase.js";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
+import { createOrUpdateUser } from '../../actions/auth'
+import axios from "axios";
 
 export const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const { user } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForRegistration"));
@@ -17,17 +22,15 @@ export const RegisterComplete = ({ history }) => {
     e.preventDefault();
 
     // Form validation
-    if(!email || !password){
-      toast.error('Email and Password are required')
-      return
+    if (!email || !password) {
+      toast.error("Email and Password are required");
+      return;
     }
 
-    if(password.length < 6) {
-      toast.error('Password must be at least 6 characters long')
-      return
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return;
     }
-
-
 
     try {
       const result = await auth.signInWithEmailLink(
@@ -44,9 +47,25 @@ export const RegisterComplete = ({ history }) => {
         await user.updatePassword(password);
         const idTokenResult = await user.getIdTokenResult();
         // populate user in redux store (later)
-        console.log('user', user, 'idTokenResult', idTokenResult)
+        console.log("user", user, "idTokenResult", idTokenResult);
+
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                email: res.data.email,
+                name: res.data.name,
+                role: res.data.role,
+                token: idTokenResult.token,
+                _id: res.data._id,
+              },
+            });
+          })
+          .catch();
+
         // Redirect
-        history.push('/')
+        history.push("/");
       }
     } catch (err) {
       console.log(err);

@@ -2,9 +2,9 @@
 const User = require ('../models/user')
 
 exports.createOrUpdateUser = async (req, res) => {
-    const {displayName, picture, email } = req.user;
+    const {name, picture, email } = req.user;
 
-    const user = await User.findOneAndUpdate({email : email}, {name : displayName, picture : picture}, { new: true})
+    const user = await User.findOneAndUpdate({email : email}, {name : email.split('@')[0], picture : picture}, { new: true})
 
     if(user){
         console.log("User Upadated:", user)
@@ -12,7 +12,7 @@ exports.createOrUpdateUser = async (req, res) => {
     }else{
         const newUser = await new User({
             email : email,
-            name : displayName,
+            name : email.split('@')[0],
             picture : picture
         }).save();
         res.json(newUser)
@@ -20,3 +20,9 @@ exports.createOrUpdateUser = async (req, res) => {
     }
 }
 
+exports.currentUser = (req, res) => {
+    User.findOne({ email : req.user.email}).exec((err, user)=> {
+        if(err) throw new Error(err)
+        res.json(user)
+    })
+}

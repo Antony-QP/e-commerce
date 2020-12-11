@@ -5,19 +5,8 @@ import { Button } from "antd";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { createOrUpdateUser } from '../../actions/auth'
 import axios from "axios";
-
-const createOrUpdateUser = async (authToken) => {
-  return await axios.post(
-    `${process.env.REACT_APP_API}/create-or-update-user`,
-    {},
-    {
-      headers: {
-        authToken: authToken,
-      },
-    }
-  );
-};
 
 export const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -45,12 +34,15 @@ export const Login = ({ history }) => {
       createOrUpdateUser(idTokenResult.token)
         .then((res) => {
           dispatch({
-            type : "LOGGED_IN_USER",
-            payload : {
-              email : res.data.email,
-              name : res.data.name
-            }
-          })
+            type: "LOGGED_IN_USER",
+            payload: {
+              email: res.data.email,
+              name: res.data.name,
+              role: res.data.role,
+              token: idTokenResult.token,
+              _id: res.data._id,
+            },
+          });
         })
         .catch();
 
@@ -66,10 +58,21 @@ export const Login = ({ history }) => {
     auth
       .signInWithPopup(googleAuthProvider)
       .then(async (result) => {
-        const user = result;
+        const {user} = result;
         const idTokenResult = await user.getIdTokenResult();
         createOrUpdateUser(idTokenResult.token)
-          .then((res) => console.log(res))
+          .then((res) => {
+            dispatch({
+              type: "LOGGED_IN_USER",
+              payload: {
+                email: res.data.email,
+                name: res.data.name,
+                role: res.data.role,
+                token: idTokenResult.token,
+                _id: res.data._id,
+              },
+            });
+          })
           .catch();
         history.push("/");
       })

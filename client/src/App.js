@@ -14,6 +14,9 @@ import Header from "./components/nav/Header";
 import RegisterComplete from './pages/auth/RegisterComplete'
 import ForgotPassword from './pages/auth/ForgotPassword'
 
+import {currentUser} from './actions/auth'
+
+
 
 function App() {
 
@@ -24,13 +27,20 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if(user){
         const idTokenResult = await user.getIdTokenResult()
-        dispatch({
-          type : "LOGGED_IN_USER",
-          payload : {
-            name : user.email,
-            token: idTokenResult.token
-          }
+        currentUser(idTokenResult.token)
+        .then((res) => {
+          dispatch({
+            type: "LOGGED_IN_USER",
+            payload: {
+              email: res.data.email,
+              name: res.data.name,
+              role: res.data.role,
+              token: idTokenResult.token,
+              _id: res.data._id,
+            },
+          });
         })
+        .catch(err => console.log(err));
       }
     })
     return () => {
