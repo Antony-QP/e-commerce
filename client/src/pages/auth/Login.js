@@ -5,15 +5,19 @@ import { Button } from "antd";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
-const createOrUpdateUser = async(authToken) => {
-  return await axios.post(`${process.env.REACT_APP_API}/create-or-update-user`, {}, {
-    headers : {
-      authToken : authToken
+const createOrUpdateUser = async (authToken) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API}/create-or-update-user`,
+    {},
+    {
+      headers: {
+        authToken: authToken,
+      },
     }
-  })
-}
+  );
+};
 
 export const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -38,19 +42,19 @@ export const Login = ({ history }) => {
 
       const { user } = result;
       const idTokenResult = await user.getIdTokenResult();
-
       createOrUpdateUser(idTokenResult.token)
-      .then(res => console.log("create or update res:", res))
-      .catch()
+        .then((res) => {
+          dispatch({
+            type : "LOGGED_IN_USER",
+            payload : {
+              email : res.data.email,
+              name : res.data.name
+            }
+          })
+        })
+        .catch();
 
-      // dispatch({
-      //   type: "LOGGED_IN_USER",
-      //   payload: {
-      //     name: user.email,
-      //     token: idTokenResult.token,
-      //   },
-      // });
-      // history.push("/");
+      history.push("/");
     } catch (err) {
       console.log(err);
       toast.error(err.message);
@@ -64,13 +68,9 @@ export const Login = ({ history }) => {
       .then(async (result) => {
         const user = result;
         const idTokenResult = await user.getIdTokenResult();
-        dispatch({
-          type: "LOGGED_IN_USER",
-          payload: {
-            name: user.email,
-            token: idTokenResult.token,
-          },
-        });
+        createOrUpdateUser(idTokenResult.token)
+          .then((res) => console.log(res))
+          .catch();
         history.push("/");
       })
       .catch((err) => {

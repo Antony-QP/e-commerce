@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase.js";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 
 export const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
