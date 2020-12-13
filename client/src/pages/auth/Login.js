@@ -6,7 +6,6 @@ import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { createOrUpdateUser } from '../../actions/auth'
-import axios from "axios";
 
 export const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -19,7 +18,15 @@ export const Login = ({ history }) => {
     if (user && user.token) {
       history.push("/");
     }
-  }, [user]);
+  }, [user, history]);
+
+  const roleBasedRedirect = (res) => {
+    if(res.data.role === 'admin'){
+      history.push('/admin/dashboard')
+    }else{
+      history.push('/user//history')
+    }
+  }
 
   const dispatch = useDispatch();
 
@@ -43,10 +50,12 @@ export const Login = ({ history }) => {
               _id: res.data._id,
             },
           });
+          // Redirect according to role
+          roleBasedRedirect(res);
         })
         .catch();
 
-      history.push("/");
+      // history.push("/");
     } catch (err) {
       console.log(err);
       toast.error(err.message);

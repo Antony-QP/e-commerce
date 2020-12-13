@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { auth } from "../../firebase.js";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import { createOrUpdateUser } from '../../actions/auth'
-import axios from "axios";
 
 export const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { user } = useSelector((state) => ({ ...state }));
+  // const { user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForRegistration"));
     // console.log(window.location.href)
     // console.log(window.localStorage.getItem('emailForRegistration'))
-  }, []);
+  }, [history]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -12,7 +12,7 @@ export const Register = ({ history }) => {
     if (user && user.token) {
       history.push("/");
     }
-  }, [user]);
+  }, [user, history]);
 
   const handleSubmit = async (e) => {
     console.log(process.env.REACT_APP_REGISTER_REDIRECT_URL);
