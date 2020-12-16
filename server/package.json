@@ -23,6 +23,7 @@
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.5",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "slugify": "^1.4.6"
   }
 }
