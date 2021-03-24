@@ -41,24 +41,6 @@ const CategoryUpdate = ({history, match}) => {
       });
   };
 
-//   const handleRemove = async(slug) => {
-//     if(window.confirm("Are you sure you would like to delete?")){
-//         setLoading(true)
-//         removeCategory(slug, user.token)
-//         .then(res => {
-//             setLoading(false)
-//             loadCategories()
-//             toast.error(`${res.data.msg}`)
-//         })
-//         .catch(err => {
-//             if (err.response.status === 400){
-//                 toast.error(err.response.data);
-//                 setLoading(false)
-//             } 
-//         })
-//     }
-//   }
-
   const categoryForm = () => (
     <form onSubmit={handleSubmit}>
       <div className='form-group'>
