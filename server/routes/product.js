@@ -6,10 +6,11 @@ const {authCheck, adminCheck} = require('../middlewares/auth')
 
 
 // Import Controllers
-const { create } = require('../controllers/product')
+const { create, read } = require('../controllers/product')
 
 // Routes
 router.post('/product', authCheck, adminCheck, create)
+router.get('/products', read)
 
 
 
