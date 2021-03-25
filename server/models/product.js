@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb')
-const mongoose = require('mongose')
+const mongoose = require('mongoose')
 const { objectId } = mongoose.Schema
 
 const productSchema = new mongoose.Schema({
