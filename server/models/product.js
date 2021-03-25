@@ -22,22 +22,22 @@ const productSchema = new mongoose.Schema({
         maxlength: 2000,
         text: true
     },
-    description: {
+    price: {
         type: Number,
         trim: true,
         required: true,
         maxlength: 32,
     },
-    category: {
-        type: ObjectId,
-        ref: "Category"
-    },
-    subs: {
-        type: [{
-            type: ObjectId,
-            ref: "Sub"
-        }]
-    },
+    // category: {
+    //     type: ObjectId,
+    //     ref: "Category"
+    // },
+    // subs: {
+    //     type: [{
+    //         type: ObjectId,
+    //         ref: "Sub"
+    //     }]
+    // },
     quantity: {
         type: Number,
         sold: {
@@ -45,9 +45,9 @@ const productSchema = new mongoose.Schema({
             default: 0
         }
     },
-    images: {
-        type: Array
-    },
+    // images: {
+    //     type: Array
+    // },
     shipping: {
         type: String,
         enum: ['Yes', "No"]
