@@ -46,10 +46,13 @@ const { user } = useSelector((state) => ({...state }))
     createProduct(values, user.token)
     .then(res => {
         console.log(res)
+        window.alert(`"${res.data.title}" has been added`)
+        window.location.reload()
     })
     .catch(err => {
         console.log(err)
-        if (err.response.status === 400) toast.error(err.response.data);
+        // if (err.response.status === 400) toast.error(err.response.data);
+        toast.error(err.response.data.err)
     })
   };
 
