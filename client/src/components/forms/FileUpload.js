@@ -3,20 +3,50 @@ import Resizer from "react-image-file-resizer";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const FileUpload = () => {
-
-  const user = useSelector((state) => ({ ...state }));
+const FileUpload = ({ values, setValues, setLoading }) => {
+  const { user } = useSelector((state) => ({ ...state }));
 
   const fileUploadAndResize = (e) => {
     //   console.log(e.target.files)
-    // Resize Image 
+    // Resize Image
+
     let files = e.target.files;
-    if(files) {
-        for(let i = 0; i < files.length; i ++){
-            Resizer.imageFileResizer(files[i], 720, 720, 'JPEG', 100, 0, (uri) => {
-                console.log(uri);
-            }, 'base64');
-        }
+    let allUploadedFiles = values.images;
+    console.log(allUploadedFiles);
+    if (files) {
+      setLoading(true);
+      for (let i = 0; i < files.length; i++) {
+        Resizer.imageFileResizer(
+          files[i],
+          720,
+          720,
+          "JPEG",
+          100,
+          0,
+          (uri) => {
+            axios.post(
+              `${process.env.REACT_APP_API}/uploadImages`,
+              { image: uri },
+              {
+                headers: {
+                  authtoken: user.token,
+                },
+              }
+            )
+            .then(res => {
+                console.log('IMAGE UPLOAD RES DATA', res)
+                setLoading(false)
+                allUploadedFiles.push(res.data)
+                setValues({ ...values, images: allUploadedFiles})
+            })
+            .catch(err => {
+                setLoading(false)
+                console.log('Cloudinary error', err)
+            })
+          },
+          "base64"
+        );
+      }
     }
     // Send to server to send to Cloudinary
     // Set URL to images[] in the parent component = Product Create
