@@ -113,7 +113,7 @@ const ProductCreateForm = ({ handleSubmit, handleOnChange, values }) => {
               <label>Color</label>
               <select
                 name='color'
-                className='form-control'
+                className='form-control' 
                 onChange={handleOnChange}>
                 <option>Please Select</option>
                 {colors.map((b) => (
