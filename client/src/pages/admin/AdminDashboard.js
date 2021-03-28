@@ -1,17 +1,20 @@
-import React from 'react'
-import AdminNav from '../../components/nav/AdminNav'
+import React, { useState } from "react";
+import AdminNav from "../../components/nav/AdminNav";
+
 
 export const AdminDashboard = () => {
-    return (
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-md-2">
-                    <AdminNav/>
-                </div>
-                <div className="col"><span>Admin Dashboard</span></div>
-            </div>
-        </div>
-    )
-}
+  const [loading, setLoading] = useState(false);
 
-export default AdminDashboard
+  return (
+    <div className='container-fluid'>
+      <div className='row'>
+        <div className='col-md-2'>
+          <AdminNav />
+        </div>
+        <h4>Admin Dashboard</h4>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;

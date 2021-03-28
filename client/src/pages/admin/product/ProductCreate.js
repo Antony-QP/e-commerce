@@ -6,7 +6,7 @@ import { createProduct } from "../../../actions/product";
 import { getCategories } from "../../../actions/category";
 import ProductCreateForm from "../../../components/forms/ProductCreateForm";
 import FileUpload from "../../../components/forms/FileUpload";
-import { LoadingOutlined, loadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const initialState = {
   title: "",
