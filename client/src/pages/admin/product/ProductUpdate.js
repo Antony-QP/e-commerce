@@ -12,7 +12,6 @@ const initialState = {
   title: "",
   description: "",
   price: "",
-  categories: [],
   category: "",
   subs: [],
   shipping: "",
@@ -30,12 +29,14 @@ const ProductUpdate = ({ match }) => {
 
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
 
 
   const { slug } = match.params;
 
   useEffect(() => {
     loadProduct()
+    loadCategories()
   }, [])
 
   const loadProduct = () => {
@@ -47,6 +48,12 @@ const ProductUpdate = ({ match }) => {
       
     })
   }
+
+  const loadCategories = () =>
+    getCategories().then((c) => {
+      console.log("Get categories in update", c.data)
+      setCategories(c.data)
+    });
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -69,6 +76,7 @@ const ProductUpdate = ({ match }) => {
           <ProductUpdateForm 
           handleSubmit={handleSubmit}
           handleOnChange={handleOnChange}
+          categories={categories}
           values={values}
           />
         </div>
