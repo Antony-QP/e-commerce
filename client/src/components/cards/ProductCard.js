@@ -4,6 +4,7 @@ import { Card } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import laptop from "../../images/default.png";
 
+
 const { Meta } = Card
 
 export const ProductCard = ({ product }) => {
