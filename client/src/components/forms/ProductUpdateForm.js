@@ -96,14 +96,14 @@ const ProductUpdateForm = ({ handleSubmit, handleOnChange, values, categories })
         <select
           name='category'
           className='form-control'
-          onChange={handleOnChange}>
-          <option>{ category ? category.name : "Please select"}</option>
+          onChange={handleOnChange}
+          value={category._id}>
           {categories.length > 0 &&
             categories.map((c) => (
               <option key={c._id} value={c._id}>
                 {c.name}
               </option>
-            ))}
+            ))} 
         </select>
       </div>
 
