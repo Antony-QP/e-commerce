@@ -57,3 +57,17 @@ exports.update = async(req,res) => {
     })
   }
 }
+
+exports.list = async(req, res) => {
+  try{
+    const { sort, order, limit } = req.body
+    const products = await Product.find({})
+    .populate('category')
+    .sort([[sort, order]])
+    .limit(limit)
+    .exec()
+    res.json(products)
+  }catch(err){
+    console.log(err)
+  }
+}
