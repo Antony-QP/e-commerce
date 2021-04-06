@@ -19,44 +19,49 @@ exports.create = async (req, res) => {
 exports.listAll = async (req, res) => {
   let products = await Product.find({})
     .limit(parseInt(req.params.count))
-    .populate('category')
-    .sort([['createdAt', 'desc']])
+    .populate("category")
+    .sort([["createdAt", "desc"]])
     .exec();
   res.json(products);
 };
 
-
-exports.remove = async(req, res) => {
+exports.remove = async (req, res) => {
   try {
-    const deleted = await Product.findOneAndRemove({ slug: req.params.slug }).exec()
-    res.json("Deleted", deleted, "on the backend")
+    const deleted = await Product.findOneAndRemove({
+      slug: req.params.slug,
+    }).exec();
+    res.json("Deleted", deleted, "on the backend");
   } catch (err) {
-    console.log(err)
-    return res.status(400).send('Product delete failed')
+    console.log(err);
+    return res.status(400).send("Product delete failed");
   }
-}
+};
 
-exports.read = async(req, res) => {
-  const product = await Product.findOne({ slug: req.params.slug})
-  .populate('category')
-  .exec()
-  res.json(product)
-} 
+exports.read = async (req, res) => {
+  const product = await Product.findOne({ slug: req.params.slug })
+    .populate("category")
+    .exec();
+  res.json(product);
+};
 
-exports.update = async(req,res) => {
-  try{
-    if(req.body.title){
-      req.body.slug = slugify(req.body.title)
+exports.update = async (req, res) => {
+  try {
+    if (req.body.title) {
+      req.body.slug = slugify(req.body.title);
     }
-    const updated = await Product.findOneAndUpdate({ slug: req.params.slug }, req.body, { new: true }).exec();
-    res.json(updated)
-  }catch(err){
-    console.log(err, "Update product error")
+    const updated = await Product.findOneAndUpdate(
+      { slug: req.params.slug },
+      req.body,
+      { new: true }
+    ).exec();
+    res.json(updated);
+  } catch (err) {
+    console.log(err, "Update product error");
     return res.status(400).json({
-      err: err.message
-    })
+      err: err.message,
+    });
   }
-}
+};
 
 // exports.list = async(req, res) => {
 //   try{
@@ -73,26 +78,58 @@ exports.update = async(req,res) => {
 // }
 
 // With pagination
-exports.list = async(req, res) => {
-  try{
-    const { sort, order, page } = req.body
-    const currentPage = page || 1
-    const perPage = 3
+exports.list = async (req, res) => {
+  try {
+    const { sort, order, page } = req.body;
+    const currentPage = page || 1;
+    const perPage = 3;
     const products = await Product.find({})
-    .skip((currentPage - 1 ) * perPage)
-    .populate('category')
-    .sort([[sort, order]])
-    .limit(perPage)
-    .exec()
-    res.json(products)
-  }catch(err){
-    
-    console.log(err)
+      .skip((currentPage - 1) * perPage)
+      .populate("category")
+      .sort([[sort, order]])
+      .limit(perPage)
+      .exec();
+    res.json(products);
+  } catch (err) {
+    console.log(err);
   }
-}
+};
 
-exports.productCount = async(req, res) => {
+exports.productCount = async (req, res) => {
   let total = await Product.find({}).estimatedDocumentCount().exec();
   res.json(total);
+};
 
+exports.productStar = async (req, res) => {
+  const product = await Product.findById(req.params.productId).exec();
+  const user = await user.findOne({ email: req.user.email }).exec();
+  const { star } = req.body;
+
+  // Need to check if currently logged in user has already rated the product
+  let existingRatingObject = product.ratings.find(
+    (element) => element.postedBy.toString === user._id
+  );
+
+  // If the user hasn't left a rating the a rating will be added here
+  if (existingRatingObject === undefined) {
+    let ratingAdded = await Product.findByIdAndUpdate(
+      product._id,
+      {
+        $push: { ratings: { star: star, postedBy: user._id } },
+      },
+      { new: true }
+    ).exec();
+    console.log(ratingAdded);
+    res.json(ratingAdded);
+  } else {
+    const ratingUpdated = await Product.updateOne(
+      {
+        ratings: { $elemMatch: existingRatingObject },
+      },
+      { $set: { "ratings.$.star": star } },
+      { new: true }
+    ).exec();
+    console.log("Rating updated: ", ratingUpdated)
+    res.json(ratingUpdated)
+  }
 };
