@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import { getProduct, productStar } from "../actions/product";
 import SingleProduct from "../components/cards/SingleProduct";
 import {useSelector} from "react-redux";
+import { getRelated } from '../actions/product'
+import ProductCard from '../components/cards/ProductCard'
 
 const Product = ({ match }) => {
   const [product, setProduct] = useState({});
+  const [related, setRelated] = useState([])
   const [star, setStar] = useState(0);
   const { user } = useSelector((state) => ({ ...state }))
 
@@ -24,7 +27,10 @@ const Product = ({ match }) => {
   })
 
   const loadSingleProduct = () => {
-    getProduct(slug).then((res) => setProduct(res.data));
+    getProduct(slug).then((res) => {
+    setProduct(res.data);
+    getRelated(res.data._id).then(res => setRelated(res.data))
+    })
   };
 
   const onStarClick = (newRating, name) => {
@@ -50,7 +56,17 @@ const Product = ({ match }) => {
           <hr />
           <h4>Related Products</h4>
           <hr />
+          {JSON.stringify(related)}
         </div>
+      </div>
+      <div className="row pb-5">
+        {related.length ? related.map((rp) => (
+          <div key={rp._id} className="col-md-4">
+            <ProductCard product={rp}/>
+          </div>
+        )) : (
+          <div className="text-center">No Products Found</div>
+        )}
       </div>
     </div>
   );

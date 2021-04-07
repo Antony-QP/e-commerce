@@ -6,7 +6,7 @@ const {authCheck, adminCheck} = require('../middlewares/auth')
 
 
 // Import Controllers
-const { create, listAll, remove, read, update, list, productCount, productStar } = require('../controllers/product')
+const { create, listAll, remove, read, update, list, productCount, productStar, listRelated } = require('../controllers/product')
 
 // Routes
 router.post('/product', authCheck, adminCheck, create);
@@ -22,6 +22,9 @@ router.post('/products', list)
 
 // rating
 router.put('/product/star/:productId', authCheck, productStar);
+
+// get related products
+router.get("/product/related/:productId", listRelated)
 
 
 
