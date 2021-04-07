@@ -8,6 +8,7 @@ import Laptop from "../../images/default.png";
 import ProductListItems from "./ProductListItems";
 import StarRating from "react-star-ratings";
 import RatingModal from "../modals/RatingModal";
+import { showAverage } from "../../actions/rating";
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
@@ -44,6 +45,9 @@ const SingleProduct = ({ product, onStarClick, star }) => {
 
       <div className='col-md-5'>
         <h1 className='bg-info p-3'>{title}</h1>
+        {product && product.ratings && product.ratings.length > 0
+          ? showAverage(product)
+          : <div className="text-center">No Rating Yet</div>}
         <Card
           actions={[
             <>
@@ -55,15 +59,15 @@ const SingleProduct = ({ product, onStarClick, star }) => {
               Add To Wishlist
             </Link>,
             <RatingModal>
-            <StarRating
-              name={_id}
-              numberOfStars={5}
-              rating={star}
-              isSelectable={true}
-              starRatedColor='red'
-              changeRating={onStarClick}
-            />
-          </RatingModal>
+              <StarRating
+                name={_id}
+                numberOfStars={5}
+                rating={star}
+                isSelectable={true}
+                starRatedColor='red'
+                changeRating={onStarClick}
+              />
+            </RatingModal>,
           ]}>
           <ProductListItems product={product} />
         </Card>
