@@ -5,7 +5,7 @@ import { Button } from "antd";
 import { MailOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { createOrUpdateUser } from '../../actions/auth'
+import { createOrUpdateUser } from "../../actions/auth";
 
 export const Login = ({ history }) => {
   const [email, setEmail] = useState("");
@@ -16,9 +16,9 @@ export const Login = ({ history }) => {
 
   useEffect(() => {
     let intended = history.location.state;
-    if(intended){
+    if (intended) {
       return;
-    }else{
+    } else {
       if (user && user.token) {
         history.push("/");
       }
@@ -26,17 +26,18 @@ export const Login = ({ history }) => {
   }, [user, history]);
 
   const roleBasedRedirect = (res) => {
+    // Redirect user to inteded page
     let intended = history.location.state;
-    if(intended){
-      history.push(intended.from)
-    }else{
-      if(res.data.role === 'admin'){
-        history.push('/admin/dashboard')
-      }else{
-        history.push('/user/history')
+    if (intended) {
+      history.push(intended.from);
+    } else {
+      if (res.data.role === "admin") {
+        history.push("/admin/dashboard");
+      } else {
+        history.push("/user/history");
       }
     }
-  }
+  };
 
   const dispatch = useDispatch();
 
@@ -77,7 +78,7 @@ export const Login = ({ history }) => {
     auth
       .signInWithPopup(googleAuthProvider)
       .then(async (result) => {
-        const {user} = result;
+        const { user } = result;
         const idTokenResult = await user.getIdTokenResult();
         createOrUpdateUser(idTokenResult.token)
           .then((res) => {

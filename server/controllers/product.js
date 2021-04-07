@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const slugify = require("slugify");
+const User = require("../models/user")
 
 exports.create = async (req, res) => {
   try {
@@ -102,7 +103,7 @@ exports.productCount = async (req, res) => {
 
 exports.productStar = async (req, res) => {
   const product = await Product.findById(req.params.productId).exec();
-  const user = await user.findOne({ email: req.user.email }).exec();
+  const user = await User.findOne({ email: req.user.email }).exec();
   const { star } = req.body;
 
   // Need to check if currently logged in user has already rated the product

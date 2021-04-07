@@ -21,7 +21,7 @@ router.get('/product/:slug', read)
 router.post('/products', list)
 
 // rating
-router.put('product/star/:productId', authCheck, productStar);
+router.put('/product/star/:productId', authCheck, productStar);
 
 
 

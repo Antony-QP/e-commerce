@@ -12,7 +12,8 @@ import RatingModal from "../modals/RatingModal";
 const { Meta } = Card;
 const { TabPane } = Tabs;
 
-const SingleProduct = ({ product }) => {
+// Child component of product.  Importing props from parent
+const SingleProduct = ({ product, onStarClick, star }) => {
   const { title, images, description, _id } = product;
   return (
     <>
@@ -57,12 +58,10 @@ const SingleProduct = ({ product }) => {
             <StarRating
               name={_id}
               numberOfStars={5}
-              rating={2}
-              changeRating={(newRating, name) =>
-                console.log("newRating", newRating, "name", name)
-              }
+              rating={star}
               isSelectable={true}
               starRatedColor='red'
+              changeRating={onStarClick}
             />
           </RatingModal>
           ]}>
