@@ -6,12 +6,16 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Laptop from "../../images/default.png";
 import ProductListItems from "./ProductListItems";
+import StarRating from "react-star-ratings";
+import RatingModal from "../modals/RatingModal";
+import { showAverage } from "../../actions/rating";
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
 
-const SingleProduct = ({ product }) => {
-  const { title, images, description } = product;
+// Child component of product.  Importing props from parent
+const SingleProduct = ({ product, onStarClick, star }) => {
+  const { title, images, description, _id } = product;
   return (
     <>
       <div className='col-md-7'>
@@ -41,6 +45,9 @@ const SingleProduct = ({ product }) => {
 
       <div className='col-md-5'>
         <h1 className='bg-info p-3'>{title}</h1>
+        {product && product.ratings && product.ratings.length > 0
+          ? showAverage(product)
+          : <div className="text-center">No Rating Yet</div>}
         <Card
           actions={[
             <>
@@ -51,6 +58,16 @@ const SingleProduct = ({ product }) => {
               <br />
               Add To Wishlist
             </Link>,
+            <RatingModal>
+              <StarRating
+                name={_id}
+                numberOfStars={5}
+                rating={star}
+                isSelectable={true}
+                starRatedColor='red'
+                changeRating={onStarClick}
+              />
+            </RatingModal>,
           ]}>
           <ProductListItems product={product} />
         </Card>

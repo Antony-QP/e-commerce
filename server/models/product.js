@@ -57,12 +57,11 @@ const productSchema = new mongoose.Schema({
     sold: {
         type: Number,
         default: 0,
-      },
-      
-    // ratings: [{
-    //     star: Number,
-    //     postedBy: {type: ObjectId, ref: 'User'}
-    // }]
+      },      
+    ratings: [{
+        star: Number,
+        postedBy: {type: ObjectId, ref: 'User'}
+    }]
 }, 
 {timestamps: true}
 );
