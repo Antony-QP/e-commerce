@@ -6,12 +6,14 @@ import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a lo
 import { Carousel } from "react-responsive-carousel";
 import Laptop from "../../images/default.png";
 import ProductListItems from "./ProductListItems";
+import StarRating from "react-star-ratings";
+import RatingModal from "../modals/RatingModal";
 
 const { Meta } = Card;
 const { TabPane } = Tabs;
 
 const SingleProduct = ({ product }) => {
-  const { title, images, description } = product;
+  const { title, images, description, _id } = product;
   return (
     <>
       <div className='col-md-7'>
@@ -51,6 +53,18 @@ const SingleProduct = ({ product }) => {
               <br />
               Add To Wishlist
             </Link>,
+            <RatingModal>
+            <StarRating
+              name={_id}
+              numberOfStars={5}
+              rating={2}
+              changeRating={(newRating, name) =>
+                console.log("newRating", newRating, "name", name)
+              }
+              isSelectable={true}
+              starRatedColor='red'
+            />
+          </RatingModal>
           ]}>
           <ProductListItems product={product} />
         </Card>
