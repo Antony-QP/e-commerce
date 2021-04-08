@@ -16,7 +16,7 @@ export const CategoryList = () => {
     }, [])
 
     const showCategories = () => categories.map((c) => (<div key={c._id} className="btn btn-outlined-primary btn-lg btn-block btn-raised m-3 col">
-        {c.name}
+        <Link to={`/category/${c.slug}`}>{c.name}</Link>
     </div>))
 
     return (
