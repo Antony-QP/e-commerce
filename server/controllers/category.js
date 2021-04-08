@@ -1,5 +1,6 @@
 const Category = require("../models/category");
 const slugify = require("slugify");
+const Product = require("../models/product");
 
 exports.create = async (req, res) => {
   try {
@@ -21,7 +22,15 @@ exports.list = async (req, res) => {
 
 exports.read = async (req, res) => {
   let category = await await Category.findOne({ slug: req.params.slug }).exec();
-  res.json(category);
+  // res.json(category);
+  const products = await Product.find({ category: category })
+    .populate("category")
+    .exec();
+
+  res.json({
+    category,
+    products,
+  });
 };
 
 exports.update = async (req, res) => {
@@ -30,11 +39,11 @@ exports.update = async (req, res) => {
     const updated = await Category.findOneAndUpdate(
       { slug: req.params.slug },
       { name, slug: slugify(name) },
-      { new : true}
+      { new: true }
     );
-    res.json(updated)
+    res.json(updated);
   } catch (err) {
-      console.log(err)
+    console.log(err);
     res.status(400).send("Category update failed");
   }
 };

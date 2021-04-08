@@ -25,6 +25,7 @@ import ProductCreate from './pages/admin/product/ProductCreate'
 import ProductUpdate from './pages/admin/product/ProductUpdate'
 import AllProducts from './pages/admin/product/AllProducts'
 import Product from './pages/Product'
+import CategoryHome from './pages/category/CategoryHome'
 
 import AdminRoute from './components/routes/AdminRoute'
 
@@ -85,6 +86,7 @@ function App() {
         <AdminRoute exact path = '/admin/products/' component={AllProducts}/>
         <AdminRoute exact path = '/admin/product/:slug' component={ProductUpdate}/>
         <Route exact path='/product/:slug' component={Product} />
+        <Route exact path='/category/:slug' component={CategoryHome} />
       </Switch>
     </Fragment>
   );
