@@ -148,3 +148,28 @@ exports.listRelated = async(req, res) => {
 
   res.json(related)
 }
+
+// Search and Filters
+
+const handleQuery = async(req, res, query) => {
+  console.log("Handling query in backend", req.body)
+  const products = await Product.find({ $text: { $search: query.text }})
+  .populate('category', '_id name')
+  .populate('postedBy', '_id name')
+  .exec();
+
+  res.json(products);
+}
+
+exports.searchFilters = async(req, res) => {
+  console.log("The request .body from the backend controller", req.body)
+    const { query } = req.body
+    try{
+      if(query){
+        console.log('Made it to the query', query)
+        await handleQuery(req, res, query)
+      }
+    }catch(err){
+      console.log("Query Error", err)
+    }
+} 

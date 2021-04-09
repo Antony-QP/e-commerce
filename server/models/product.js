@@ -1,6 +1,5 @@
-const { ObjectId } = require('mongodb')
 const mongoose = require('mongoose')
-const { objectId } = mongoose.Schema
+const { ObjectId } = mongoose.Schema
 
 const productSchema = new mongoose.Schema({
     title: {
@@ -34,10 +33,6 @@ const productSchema = new mongoose.Schema({
     },
     quantity: {
         type: Number,
-        sold: {
-            type: Number,
-            default: 0
-        }
     },
     images: {
         type: Array
