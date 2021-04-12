@@ -3,7 +3,9 @@ import { getProductsByCount } from "../actions/product";
 import { useSelector, useDispatch } from "react-redux";
 import ProductCard from "../components/cards/ProductCard";
 import { fetchProductsByFilter } from "../actions/product";
-import { Menu, Slider } from "antd";
+import { Menu, Slider, Checkbox } from "antd";
+import { DollarOutlined, DownSquareOutlined } from "@ant-design/icons";
+import { getCategories } from "../actions/category";
 
 const { SubMenu, ItemGroup } = Menu;
 
@@ -11,13 +13,29 @@ export const Shop = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 0]);
+  const [ok, setOk] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [categoryIds, setCategoryIds] = useState([]);
 
+  let dispatch = useDispatch();
   let { search } = useSelector((state) => ({ ...state }));
   const text = search;
 
   useEffect(() => {
     loadAllProducts();
+    // Fetch all categories
+    getCategories().then((res) => setCategories(res.data));
   }, []);
+
+  const fetchProducts = (arg) => {
+    fetchProductsByFilter(arg)
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // Products loaded by default
   const loadAllProducts = () => {
@@ -29,42 +47,110 @@ export const Shop = () => {
 
   // Fetch specific products from query
   useEffect(() => {
-    fetchProducts({ query: text });
+    const delayed = setTimeout(() => {
+      fetchProducts({ query: text });
+    }, 300);
+    return () => clearTimeout(delayed);
   }, [text]);
 
-  const fetchProducts = (arg) => {
-    console.log("Sending argument to the backend", arg);
-    fetchProductsByFilter(arg)
-      .then((res) => {
-        setProducts(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  // Load products based on product range
+  useEffect(() => {
+    console.log("okay to request");
+    fetchProducts({ price });
+  }, [ok]);
+
+  // Handle slider
+  const handleSlider = (value) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice(value);
+    setCategoryIds([]);
+    setTimeout(() => {
+      setOk(!ok);
+    }, 300);
   };
 
-  // Load products based on product range
+  // Load products by category
+  const showCategories = () =>
+    categories.map((c) => (
+      <div key={c._id}>
+        <Checkbox
+          onChange={handleCheck}
+          className='pb-2 pl-4 pr-4 mt-2'
+          value={c._id}
+          name='category'
+          checked={categoryIds.includes(c._id)}>
+          {c.name}
+        </Checkbox>
+        <br />
+      </div>
+    ));
+
+  const handleCheck = (e) => {
+    dispatch({
+      type: "SEARCH_QUERY",
+      payload: { text: "" },
+    });
+    setPrice([0, 0]);
+    let inTheState = [...categoryIds];
+    let justChecked = e.target.value;
+    let foundInTheState = inTheState.indexOf(justChecked);
+
+    // IndexOf = If not found returns -1 else will return index
+    if (foundInTheState === -1) {
+      inTheState.push(justChecked);
+    } else {
+      inTheState.splice(foundInTheState, 1);
+      inTheState.splice();
+    }
+
+    setCategoryIds(inTheState);
+    console.log(inTheState);
+    fetchProducts({ category: inTheState });
+  };
 
   return (
     <div className='container-fluid'>
       <div className='row'>
-        <div className='col-md-3'>
+        <div className='col-md-3 p-2'>
           <h4>Search/Filter</h4>
-          <Menu mode="inline">
-            <SubMenu>
+          <Menu mode='inline' defaultOpenKeys={["1", "2"]}>
+            {/* Price */}
+            <SubMenu
+              key='1'
+              title={
+                <span className='h6'>
+                  <DollarOutlined />
+                  Price
+                </span>
+              }>
               <div className=''>
                 <Slider
                   className='ml-4 mr-4'
                   tipFormatter={(v) => `$${v}`}
                   range
+                  max='4999'
                   value={price}
-                  onChange={(value) => setPrice(value)}
+                  onChange={handleSlider}
                 />
               </div>
             </SubMenu>
+            {/* Category */}
+            <SubMenu
+              key='2'
+              title={
+                <span className='h6'>
+                  <DownSquareOutlined />
+                  Categories
+                </span>
+              }>
+              <div style={{ marginTop: "-10px" }}>{showCategories()}</div>
+            </SubMenu>
           </Menu>
         </div>
-        <div className='col-md-9'>
+        <div className='col-md-9 p-2'>
           {loading ? (
             <h4 className='text-danger'>Products</h4>
           ) : (
