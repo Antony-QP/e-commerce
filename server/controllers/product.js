@@ -193,7 +193,7 @@ const handleCategory = async (req, res, category) => {
 
 exports.searchFilters = async (req, res) => {
   console.log("The request .body from the backend controller", req.body);
-  const { query, price, category } = req.body;
+  const { query, price, category, stars } = req.body;
 
   if (query) {
     console.log("text ----> ", query);
@@ -208,5 +208,10 @@ exports.searchFilters = async (req, res) => {
   if (category) {
     console.log("category ----> ", category);
     await handleCategory(req, res, category);
+  }
+
+  if(stars){
+    console.log("stars ----> ", stars)
+    await handleStar(req, res, stars)
   }
 };
