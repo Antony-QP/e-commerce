@@ -1,6 +1,6 @@
 const Product = require("../models/product");
 const slugify = require("slugify");
-const User = require("../models/user")
+const User = require("../models/user");
 
 exports.create = async (req, res) => {
   try {
@@ -130,67 +130,88 @@ exports.productStar = async (req, res) => {
       { $set: { "ratings.$.star": star } },
       { new: true }
     ).exec();
-    console.log("Rating updated: ", ratingUpdated)
-    res.json(ratingUpdated)
+    console.log("Rating updated: ", ratingUpdated);
+    res.json(ratingUpdated);
   }
 };
 
-exports.listRelated = async(req, res) => {
+exports.listRelated = async (req, res) => {
   const product = await Product.findById(req.params.productId).exec();
   const related = await Product.find({
     _id: { $ne: product._id },
     category: product.category,
   })
-  .limit(3)
-  .populate('category')
-  .populate('postedBy')
-  .exec()
+    .limit(3)
+    .populate("category")
+    .populate("postedBy")
+    .exec();
 
-  res.json(related)
-}
+  res.json(related);
+};
 
 // Search and Filters
 
-const handleQuery = async(req, res, query) => {
-  const products = await Product.find({ $text: { $search: query.text }})
-  .populate('category', '_id name')
-  .populate('postedBy', '_id name')
-  .exec();
+const handleQuery = async (req, res, query) => {
+  const products = await Product.find({ $text: { $search: query } })
+    .populate("category", "_id name")
+    .populate("postedBy", "_id name")
+    .exec();
 
   res.json(products);
-}
+};
 
-const handlePrice = async(req, res, price) => {
-  try{
+const handlePrice = async (req, res, price) => {
+  try {
     let products = await Product.find({
       price: {
         $gte: price[0],
-        $lte: price[1]
-      }
+        $lte: price[1],
+      },
     })
-    .populate('category', '_id name')
-    .populate('postedBy', '_id name')
-    .exec();
+      .populate("category", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
 
-    res.json(products)
-  }catch(err){
-    console.log(err)
+    res.json(products);
+  } catch (err) {
+    console.log(err);
   }
-}
+};
 
-exports.searchFilters = async(req, res) => {
-  console.log("The request .body from the backend controller", req.body)
-    const { query, price } = req.body
-    try{
-      if(query){
-        await handleQuery(req, res, query)
-      }
+const handleCategory = async (req, res, category) => {
+  try {
+    let products = await Product.find({ category })
+      .populate("category", "_id name")
+      .populate("postedBy", "_id name")
+      .exec();
 
-      if(price !== undefined){
-        console.log("price ----> ",  price)
-        await handlePrice(req, res, price)
-      }
-    }catch(err){
-      console.log("Query Error", err)
-    }
-} 
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.searchFilters = async (req, res) => {
+  console.log("The request .body from the backend controller", req.body);
+  const { query, price, category, stars } = req.body;
+
+  if (query) {
+    console.log("text ----> ", query);
+    await handleQuery(req, res, query);
+  }
+
+  if (price !== undefined) {
+    console.log("price ----> ", price);
+    await handlePrice(req, res, price);
+  }
+
+  if (category) {
+    console.log("category ----> ", category);
+    await handleCategory(req, res, category);
+  }
+
+  if(stars){
+    console.log("stars ----> ", stars)
+    await handleStar(req, res, stars)
+  }
+};
