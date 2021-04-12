@@ -152,7 +152,7 @@ exports.listRelated = async(req, res) => {
 // Search and Filters
 
 const handleQuery = async(req, res, query) => {
-  const products = await Product.find({ $text: { $search: query.text }})
+  const products = await Product.find({ $text: { $search: query }})
   .populate('category', '_id name')
   .populate('postedBy', '_id name')
   .exec();
@@ -181,8 +181,9 @@ const handlePrice = async(req, res, price) => {
 exports.searchFilters = async(req, res) => {
   console.log("The request .body from the backend controller", req.body)
     const { query, price } = req.body
-    try{
+   
       if(query){
+        console.log("price ----> ", query)
         await handleQuery(req, res, query)
       }
 
@@ -190,7 +191,4 @@ exports.searchFilters = async(req, res) => {
         console.log("price ----> ",  price)
         await handlePrice(req, res, price)
       }
-    }catch(err){
-      console.log("Query Error", err)
-    }
 } 
