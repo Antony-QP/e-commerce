@@ -31,6 +31,14 @@ export const Shop = () => {
     "Toshiba",
     "Lenovo",
   ]);
+  const [colors, setColors] = useState([
+    "Black",
+    "Grey",
+    "Silver",
+    "White",
+    "Blue",
+  ]);
+  const [color, setColor] = useState("");
 
   let dispatch = useDispatch();
   let { search } = useSelector((state) => ({ ...state }));
@@ -83,6 +91,7 @@ export const Shop = () => {
     setCategoryIds([]);
     setStar("");
     setBrand("");
+    setColor('')
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -112,6 +121,7 @@ export const Shop = () => {
     setPrice([0, 0]);
     setStar("");
     setBrand("");
+    setColor('')
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
     let foundInTheState = inTheState.indexOf(justChecked);
@@ -140,6 +150,7 @@ export const Shop = () => {
     setCategoryIds([]);
     setStar(num);
     setBrand("");
+    setColor('')
     fetchProducts({ stars: num });
   };
 
@@ -177,15 +188,43 @@ export const Shop = () => {
     setCategoryIds([]);
     setStar("");
     setBrand(e.target.value);
+    setColor('')
     fetchProducts({ brand: e.target.value });
   };
+
+  // Search products by color
+
+  const showColors = () =>
+    colors.map((c) => (
+      <Radio
+        value={c}
+        name={color}
+        checked={c === color}
+        onChange={handleColor}
+        className='pb-1 pl-4 pr-4'>
+        {c}
+      </Radio>
+    ));
+
+    const handleColor = (e) => {
+      dispatch({
+        type: "SEARCH_QUERY",
+        payload: { text: "" },
+      });
+      setPrice([0, 0]);
+      setCategoryIds([]);
+      setStar("");
+      setBrand('')
+      setColor(e.target.value);
+      fetchProducts({ color: e.target.value });
+    };
 
   return (
     <div className='container-fluid'>
       <div className='row'>
         <div className='col-md-3 p-2'>
           <h4>Search/Filter</h4>
-          <Menu mode='inline' defaultOpenKeys={["1", "2", "3", "4"]}>
+          <Menu mode='inline' defaultOpenKeys={["1", "2", "3", "4", "5"]}>
             {/* Price */}
             <SubMenu
               key='1'
@@ -241,6 +280,18 @@ export const Shop = () => {
                 </span>
               }>
               <div style={{ marginTop: "-10px" }}>{showBrands()}</div>
+            </SubMenu>
+
+            {/* Colors */}
+            <SubMenu
+              key='5'
+              title={
+                <span className='h6'>
+                  <StarOutlined />
+                  Colors
+                </span>
+              }>
+              <div style={{ marginTop: "-10px" }}>{showColors()}</div>
             </SubMenu>
           </Menu>
         </div>
