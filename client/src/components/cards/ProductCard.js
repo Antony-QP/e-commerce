@@ -11,7 +11,7 @@ const { Meta } = Card;
 export const ProductCard = ({ product }) => {
   const { description, title, images, slug, price } = product;
 
-  const [tootTip, setToolTip] = useState("Clickto add");
+  const [toolTip, setToolTip] = useState("Click to add");
 
   const handleAddToCart = () => {
     // Create cart array
