@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu } from "antd";
+import { Menu, Badge } from "antd";
 import {
   AppstoreOutlined,
   SettingOutlined,
@@ -7,12 +7,13 @@ import {
   UserAddOutlined,
   LogoutOutlined,
   ShoppingOutlined,
-  ShrinkOutlined
+  ShoppingCartOutlined,
+  ShrinkOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Search from '../forms/Search'
+import Search from "../forms/Search";
 
 // Logout
 import firebase from "firebase";
@@ -22,7 +23,7 @@ export const Header = () => {
 
   let dispatch = useDispatch();
   let history = useHistory();
-  let { user } = useSelector((state) => ({ ...state }));
+  let { user, cart } = useSelector((state) => ({ ...state }));
 
   const { SubMenu, Item } = Menu;
 
@@ -50,6 +51,16 @@ export const Header = () => {
         <Link to='/shop'>Shop</Link>
       </Item>
 
+      <Item key='cart' icon={<ShoppingCartOutlined />}>
+        <Link to='/cart'>
+          <Badge count={cart.length} offset={[9,0]}>
+            Cart
+          </Badge>
+        </Link>
+      </Item>
+
+
+
       {!user && (
         <Item key='Register' icon={<UserAddOutlined />} className='float-right'>
           <Link to='/register'>Register</Link>
@@ -63,19 +74,29 @@ export const Header = () => {
       )}
 
       {user && (
-        <SubMenu key='SubMenu' icon={<SettingOutlined />} 
-        title={user.name.split('@')[0]} 
-        className="float-right">
-          {user && user.role === 'subscriber' &&  <Item><Link to="/user/history">Dashboard</Link></Item>}
-          {user && user.role === 'admin' &&  <Item><Link to="/admin/dashboard">Dashboard</Link></Item>}
+        <SubMenu
+          key='SubMenu'
+          icon={<SettingOutlined />}
+          title={user.name.split("@")[0]}
+          className='float-right'>
+          {user && user.role === "subscriber" && (
+            <Item>
+              <Link to='/user/history'>Dashboard</Link>
+            </Item>
+          )}
+          {user && user.role === "admin" && (
+            <Item>
+              <Link to='/admin/dashboard'>Dashboard</Link>
+            </Item>
+          )}
           <Item icon={<LogoutOutlined />} onClick={logout}>
             Logout
           </Item>
         </SubMenu>
       )}
 
-      <span className="float-right p-1">
-        <Search/>
+      <span className='float-right p-1'>
+        <Search />
       </span>
     </Menu>
   );

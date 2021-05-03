@@ -4,6 +4,7 @@ import { Card, Tooltip } from "antd";
 import { EyeOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import laptop from "../../images/default.png";
 import { showAverage } from "../../actions/rating";
+import { useSelector, useDispatch } from 'react-redux'
 import _ from "lodash";
 
 const { Meta } = Card;
@@ -12,6 +13,9 @@ export const ProductCard = ({ product }) => {
   const { description, title, images, slug, price } = product;
 
   const [toolTip, setToolTip] = useState("Click to add");
+
+  const { user, cart } = useSelector((state) => ({ ...state }))
+  const dispatch = useDispatch()
 
   const handleAddToCart = () => {
     // Create cart array
@@ -31,6 +35,11 @@ export const ProductCard = ({ product }) => {
       localStorage.setItem("cart", JSON.stringify(unique));
       // Show tool tip
       setToolTip("Added");
+
+      dispatch({
+        type: "ADD_TO_CART",
+        payload: unique,
+      })
     }
   };
 
