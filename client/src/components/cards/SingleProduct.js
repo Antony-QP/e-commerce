@@ -48,6 +48,11 @@ const SingleProduct = ({ product, onStarClick, star }) => {
         type: "ADD_TO_CART",
         payload: unique,
       })
+       // Show cart items in side drawer
+       dispatch({
+        type: "SET_VISIBLE",
+        payload: true,
+      })
     }
   };
 

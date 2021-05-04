@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import {auth} from './firebase'
 import { useDispatch } from 'react-redux'
 
+import SideDrawer from './components/drawer/SideDrawer'
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Home from "./pages/Home";
@@ -27,6 +28,8 @@ import AllProducts from './pages/admin/product/AllProducts'
 import Product from './pages/Product'
 import CategoryHome from './pages/category/CategoryHome'
 import Shop from './pages/Shop'
+import Cart from './pages/Cart'
+
 
 import AdminRoute from './components/routes/AdminRoute'
 
@@ -69,6 +72,7 @@ function App() {
     <Fragment>
       <Header />
       <ToastContainer/>
+      <SideDrawer/>
       <Switch>
         <Route exact path='/' component={Home} />
         <Route exact path='/login' component={Login} />
@@ -89,6 +93,7 @@ function App() {
         <Route exact path='/product/:slug' component={Product} />
         <Route exact path='/category/:slug' component={CategoryHome} />
         <Route exact path='/shop' component={Shop} />
+        <Route exact path='/cart' component={Cart} />
       </Switch>
     </Fragment>
   );
