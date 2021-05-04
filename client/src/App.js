@@ -27,6 +27,7 @@ import AllProducts from './pages/admin/product/AllProducts'
 import Product from './pages/Product'
 import CategoryHome from './pages/category/CategoryHome'
 import Shop from './pages/Shop'
+import Cart from './pages/Cart'
 
 import AdminRoute from './components/routes/AdminRoute'
 
@@ -89,6 +90,7 @@ function App() {
         <Route exact path='/product/:slug' component={Product} />
         <Route exact path='/category/:slug' component={CategoryHome} />
         <Route exact path='/shop' component={Shop} />
+        <Route exact path='/cart' component={Cart} />
       </Switch>
     </Fragment>
   );
