@@ -1,9 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import ProductCardInCheckout from '../components/cards/ProductCardInCheckout'
+import ProductCardInCheckout from "../components/cards/ProductCardInCheckout";
+import { userCart } from "../actions/user";
 
-const Cart = () => {
+const Cart = ({ history }) => {
   const { cart, user } = useSelector((state) => ({ ...state }));
   const dispatch = useDispatch();
 
@@ -13,7 +14,17 @@ const Cart = () => {
     }, 0);
   };
 
-  const saveOrderToDb = () => {};
+  const saveOrderToDb = () => {
+    // console.log("cart", JSON.stringify(cart, null, 4))
+    userCart(cart, user.token)
+      .then((res) => {
+        console.log("Cart post response", res);
+        if (res.data.ok) {
+          history.push("/checkout");
+        }
+      })
+      .catch((err) => console.log("cart save error", err));
+  };
 
   const showCartItems = () => (
     <table className='table table-bordered'>
@@ -30,7 +41,7 @@ const Cart = () => {
         </tr>
       </thead>
       {cart.map((p) => (
-        <ProductCardInCheckout key={p._id} p={p}/>
+        <ProductCardInCheckout key={p._id} p={p} />
       ))}
     </table>
   );
