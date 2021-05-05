@@ -11,11 +11,11 @@ exports.userCart = async (req, res) => {
   const user = await User.findOne({ email: req.user.email }).exec();
 
   //   Check if cart with logged in user id already exists
-  let cartExistByThisUser = await Cart.findOne({ orderedBy: user._id }).exec();
+  let cartExistByThisUser = await Cart.findOne({ orderdBy: user._id }).exec();
 
   if (cartExistByThisUser) {
     cartExistByThisUser.remove();
-    console.log("removed old cart");
+    // console.log("removed old cart");
   }
 
   for (let i = 0; i < cart.length; i++) {
@@ -24,8 +24,8 @@ exports.userCart = async (req, res) => {
     object.count = cart[i].count;
     object.color = cart[i].color;
     //   Get price for getting total
-    let { price } = await Product.findById(cart[i]._id).select("price").exec();
-    object.price = price;
+    let productFromDb = await Product.findById(cart[i]._id).select("price").exec();
+    object.price = productFromDb.price;
 
     products.push(object);
   }
@@ -35,23 +35,37 @@ exports.userCart = async (req, res) => {
   for (let i = 0; i < products.length; i++) {
     cartTotal = cartTotal + products[i].price * products[i].count;
   }
-  console.log("cart total", cartTotal);
+  // console.log("cart total", cartTotal);
 
   let newCart = await new Cart({
     products,
     cartTotal,
-    orderedBy: user._id,
+    orderdBy: user._id,
   }).save();
-  console.log('New Cart', newCart)
-  res.json({ ok: true })
+  // console.log("New Cart", newCart);
+  res.json({ ok: true });
 };
 
-exports.getUserCart = async () => {
-    const user = await User.findOne({ email: req.email.user}).exec();
+exports.getUserCart = async (req, res) => {
+  const user = await User.findOne({ email: req.user.email }).exec();
 
-    let cart = await Cart.findOne({ orderedBy: user._id}).populate('products.product', '_id title price totalAfterDiscount').exec();
+  let cart = await Cart.findOne({ orderdBy: user._id })
+    .populate("products.product", "_id title price totalAfterDiscount")
+    .exec();
 
-    const { products, cartTotal, totalAfterDiscount} = cart
+  const { products, cartTotal, totalAfterDiscount } = cart;
 
-    res.json({ products, cartTotal, totalAfterDiscount})
+  res.json({ products, cartTotal, totalAfterDiscount });
+};
+
+exports.emptyCart = async(req, res) => {
+  const user = await User.findOne({ email: req.user.email }).exec();
+  const cart = await Cart.findOneAndRemove({ orderdBy: user._id}).exec();
+  res.json(cart)
+}
+
+exports.saveAddress = async(req, res) => {
+  const userAddress = await User.findOneAndUpdate({ email: req.user.email }, {address: req.body.address }).exec();
+  console.log(res)
+  res.json({ ok: true });
 }
