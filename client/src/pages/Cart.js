@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import ProductCardInCheckout from '../components/cards/ProductCardInCheckout'
-import {userCart} from '../actions/user'
+import ProductCardInCheckout from "../components/cards/ProductCardInCheckout";
+import { userCart } from "../actions/user";
 
 const Cart = ({ history }) => {
   const { cart, user } = useSelector((state) => ({ ...state }));
@@ -17,14 +17,13 @@ const Cart = ({ history }) => {
   const saveOrderToDb = () => {
     // console.log("cart", JSON.stringify(cart, null, 4))
     userCart(cart, user.token)
-    .then(res => {
-      console.log('Cart post response', res)
-      if(res.data.ok){
-        history.push('/checkout')
-      }
-    })
-    .catch(err => console.log("cart save error", err)
-    )
+      .then((res) => {
+        console.log("Cart post response", res);
+        if (res.data.ok) {
+          history.push("/checkout");
+        }
+      })
+      .catch((err) => console.log("cart save error", err));
   };
 
   const showCartItems = () => (
@@ -42,7 +41,7 @@ const Cart = ({ history }) => {
         </tr>
       </thead>
       {cart.map((p) => (
-        <ProductCardInCheckout key={p._id} p={p}/>
+        <ProductCardInCheckout key={p._id} p={p} />
       ))}
     </table>
   );
