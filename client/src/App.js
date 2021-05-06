@@ -20,6 +20,7 @@ import Wishlist from './pages/user/Wishlist'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import CategoryCreate from './pages/admin/category/CategoryCreate'
 import CategoryUpdate from './pages/admin/category/CategoryUpdate'
+import CreateCouponPage from './pages/admin/coupon/CreateCouponPage'
 import SubCreate from './pages/admin/sub/SubCreate'
 import SubUpdate from './pages/admin/sub/SubUpdate'
 import ProductCreate from './pages/admin/product/ProductCreate'
@@ -85,6 +86,7 @@ function App() {
         <UserRoute exact path = '/user/wishlist' component={Wishlist}/>
         <UserRoute exact path = '/checkout' component={Checkout}/>
         <AdminRoute exact path = '/admin/dashboard' component={AdminDashboard}/>
+        <AdminRoute exact path = '/admin/coupon' component={CreateCouponPage}/>
         <AdminRoute exact path = '/admin/category' component={CategoryCreate}/>
         <AdminRoute exact path = '/admin/category/:slug' component={CategoryUpdate}/>
         <AdminRoute exact path = '/admin/sub' component={SubCreate}/>

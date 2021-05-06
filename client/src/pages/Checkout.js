@@ -25,7 +25,6 @@ export const Checkout = () => {
   const saveAddressToDb = () => {
     saveUserAddress(user.token, address).then((res) => {
       if (res.data.ok) {
-        console.log("address", address);
         setAddressSaved(true);
         toast.success("Address saved");
       }
@@ -56,7 +55,7 @@ export const Checkout = () => {
         <h4>Delivery Address</h4>
         <br />
         <br />
-        <ReactQuill theme='snow' onChange={setAddress} />
+        <ReactQuill theme='snow' value={address} onChange={setAddress} />
         <button className='btn btn-primary mt-2' onClick={saveAddressToDb}>
           Save
         </button>
