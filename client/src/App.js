@@ -30,6 +30,7 @@ import Product from './pages/Product'
 import CategoryHome from './pages/category/CategoryHome'
 import Shop from './pages/Shop'
 import Cart from './pages/Cart'
+import Payment from './pages/Payment'
 import Checkout from './pages/Checkout'
 
 
@@ -85,6 +86,7 @@ function App() {
         <UserRoute exact path = '/user/password' component={Password}/>
         <UserRoute exact path = '/user/wishlist' component={Wishlist}/>
         <UserRoute exact path = '/checkout' component={Checkout}/>
+        <UserRoute exact path = '/payment' component={Payment}/>
         <AdminRoute exact path = '/admin/dashboard' component={AdminDashboard}/>
         <AdminRoute exact path = '/admin/coupon' component={CreateCouponPage}/>
         <AdminRoute exact path = '/admin/category' component={CategoryCreate}/>
