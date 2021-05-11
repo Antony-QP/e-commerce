@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const Product = require("../models/product");
 const Cart = require("../models/cart");
-const Copuon = require("../models/coupon");
+const Coupon = require("../models/coupon");
 
 exports.userCart = async (req, res) => {
   //   console.log("Backend checking req.body - ", req.body);
@@ -90,11 +90,11 @@ exports.applyCouponToUserCart = async (req, res) => {
 
   const user = await User.findOne({ email: req.user.email }).exec();
 
-  let { products, cartTotal } = await Cart.findOne({ orderedBy: user._id })
+  let { products, cartTotal } = await Cart.findOne({ orderdBy: user._id })
     .populate("products.product", "_id title price")
     .exec();
 
-  console.log("cartTotal:", cartTotal, "discount:", validCoupon.discount);
+  // console.log("cartTotal:", cartTotal, "discount:", validCoupon.discount);
 
   // Total after discount applied
   let totalAfterDiscount = (
