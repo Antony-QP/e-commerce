@@ -18,14 +18,39 @@ const StripeCheckout = () => {
 
   useEffect(() => {
     createPaymentIntent(user.token).then((res) => {
-      console.log("Create payment intent", res.data);
-      setClientSecret(res.data);
+      console.log("Create payment intent", res.data.clientSecret);
+      setClientSecret(`${res.data.clientSecret}`);
     });
   }, []);
 
-  const handleSubmit = async (e) => {};
+  const handleSubmit = async (e) => {
+      e.preventDefault()
+      setProcessing(true)
 
-  const handleChange = async (e) => {};
+      const payload = await stripe.confirmCardPayment(`${clientSecret}`, {
+          payment_method: {
+              card: elements.getElement(CardElement),
+              billing_details: {
+                  name: e.target.name.value
+              }
+          }
+      })
+
+      if(payload.error){
+        setError(`Payment failed ${payload.error.message}`)
+        setProcessing(false)
+      }else{
+        console.log(JSON.stringify(payload, null, 4))
+        setError("")
+        setProcessing(false)
+        setSucceeded(true)
+      }
+  };
+
+  const handleChange = async (e) => {
+      setDisabled(e.empty)
+      setError(e.error ? e.error.message : "" );
+  };
 
   const cardStyle = {
     style: {
@@ -58,6 +83,8 @@ const StripeCheckout = () => {
                 {processing ? <div className="spinner" id="spinner"></div> : "Pay"}
             </span>
         </button>
+        <br/>
+        {error && <div className="card-error" role="alert">{error}</div>}
       </form>
     </div>
   );
