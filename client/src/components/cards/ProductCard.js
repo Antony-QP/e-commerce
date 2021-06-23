@@ -72,10 +72,10 @@ export const ProductCard = ({ product }) => {
             </>
           </Link>,
           <Tooltip title={toolTip}>
-            <a onClick={handleAddToCart}>
+            <a onClick={handleAddToCart} disabled={ product.quantity < 1 }>
               <ShoppingCartOutlined className='text-danger' />
               <br />
-              Add To Cart
+              {product.quantity < 1 ? 'Out of stock' : 'Add to cart'}
             </a>
           </Tooltip>,
         ]}>

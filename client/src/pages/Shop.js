@@ -73,8 +73,8 @@ export const Shop = () => {
   useEffect(() => {
     const delayed = setTimeout(() => {
       fetchProducts({ query: text });
-      if(!text){
-        loadAllProducts()
+      if (!text) {
+        loadAllProducts();
       }
     }, 300);
     return () => clearTimeout(delayed);
@@ -96,7 +96,7 @@ export const Shop = () => {
     setStar("");
     setBrand("");
     setColor("");
-    setShipping('')
+    setShipping("");
     setTimeout(() => {
       setOk(!ok);
     }, 300);
@@ -127,7 +127,7 @@ export const Shop = () => {
     setStar("");
     setBrand("");
     setColor("");
-    setShipping('')
+    setShipping("");
     let inTheState = [...categoryIds];
     let justChecked = e.target.value;
     let foundInTheState = inTheState.indexOf(justChecked);
@@ -157,7 +157,7 @@ export const Shop = () => {
     setStar(num);
     setBrand("");
     setColor("");
-    setShipping('')
+    setShipping("");
     fetchProducts({ stars: num });
   };
 
@@ -176,6 +176,7 @@ export const Shop = () => {
     brands.map((b) => (
       <div>
         <Radio
+          key={b}
           value={b}
           name={brand}
           checked={b === brand}
@@ -196,7 +197,7 @@ export const Shop = () => {
     setStar("");
     setBrand(e.target.value);
     setColor("");
-    setShipping('')
+    setShipping("");
     fetchProducts({ brand: e.target.value });
   };
 
@@ -205,6 +206,7 @@ export const Shop = () => {
   const showColors = () =>
     colors.map((c) => (
       <Radio
+        key={c}
         value={c}
         name={color}
         checked={c === color}
@@ -223,7 +225,7 @@ export const Shop = () => {
     setCategoryIds([]);
     setStar("");
     setBrand("");
-    setShipping('')
+    setShipping("");
     setColor(e.target.value);
     fetchProducts({ color: e.target.value });
   };
@@ -231,10 +233,22 @@ export const Shop = () => {
   // Search product by shipping
   const showShipping = () => (
     <>
-    <Checkbox onChange={handleShippingChange} checked={shipping === "Yes"} className="pb-2 pl-4 pr-4" value="Yes">Yes</Checkbox>
-    <Checkbox onChange={handleShippingChange} checked={shipping === "No"} className="pb-2 pl-4 pr-4" value="No">No</Checkbox>
+      <Checkbox
+        onChange={handleShippingChange}
+        checked={shipping === "Yes"}
+        className='pb-2 pl-4 pr-4'
+        value='Yes'>
+        Yes
+      </Checkbox>
+      <Checkbox
+        onChange={handleShippingChange}
+        checked={shipping === "No"}
+        className='pb-2 pl-4 pr-4'
+        value='No'>
+        No
+      </Checkbox>
     </>
-  )
+  );
 
   const handleShippingChange = (e) => {
     dispatch({
@@ -245,10 +259,10 @@ export const Shop = () => {
     setCategoryIds([]);
     setStar("");
     setBrand("");
-    setColor('');
-    setShipping(e.target.value)
+    setColor("");
+    setShipping(e.target.value);
     fetchProducts({ shipping: e.target.value });
-  }
+  };
   return (
     <div className='container-fluid'>
       <div className='row'>
