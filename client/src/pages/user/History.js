@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { toast } from "react-toastify";
 import ShowPaymentInfo from "../../components/cards/ShowPaymentInfo"
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import Invoice from "../../components/order/Invoice"
 
 export const History = () => {
   const [orders, setOrders] = useState([]);
@@ -57,6 +59,12 @@ export const History = () => {
     </table>
   );
 
+  const showDownloadLink = (order) => (
+    <PDFDownloadLink document={<Invoice order={order}/>} className="btn btn-sm btn-block btn-outline-primary" fileName="Invoice.pdf">
+      Download PDF
+    </PDFDownloadLink>
+  )
+
   const showEachOrder = () =>
     orders.map((order, i) => (
       <div key={i} className='m-5 p-3 card'>
@@ -64,7 +72,7 @@ export const History = () => {
         {showOrderInTable(order)}
         <div className='row'>
           <div className='col'>
-            <p>PDF Download</p>
+            <div className="col">{showDownloadLink()}</div>
           </div>
         </div>
       </div>

@@ -7,8 +7,8 @@ import {
   applyCoupon,
 } from "../actions/user";
 import { toast } from "react-toastify";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import ReactQuill from "react-quill";
+// import "react-quill/dist/quill.snow.css";
 
 export const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -59,9 +59,14 @@ export const Checkout = ({ history }) => {
     });
   };
 
-  const showAddress = () => (
+  const showAddress = (e) => (
     <>
-      <ReactQuill theme='snow' value={address} onChange={setAddress} />
+      <input
+        onChange={(e) => {setAddress(e.target.value)}}
+        type='text'
+        className='form-control'
+        value={address}
+      />
       <button className='btn btn-primary mt-2' onClick={saveAddressToDb}>
         Save
       </button>
