@@ -72,7 +72,7 @@ export const History = () => {
         {showOrderInTable(order)}
         <div className='row'>
           <div className='col'>
-            <div className="col">{showDownloadLink()}</div>
+            <div className="col">{showDownloadLink(order)}</div>
           </div>
         </div>
       </div>

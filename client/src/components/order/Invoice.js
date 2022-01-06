@@ -1,5 +1,5 @@
 import React from 'react'
-import { Page, Text, Document, StyleSheet, PDFDownloadLink } from '@react-pdf/renderer';
+import { Page, Text, Document, StyleSheet } from '@react-pdf/renderer';
 import { Table, TableHeader, TableCell, TableBody, DataTableCell } from "@david.kucsai/react-pdf-table"
 
 const Invoice = ({ order }) => (
@@ -20,7 +20,7 @@ const Invoice = ({ order }) => (
                 </TableHeader>
             </Table>
            
-            {/* <Table data={order.products}>
+            <Table data={order.products}>
                 <TableBody>
                     <DataTableCell getContent={(x) => x.product.title}/>
                     <DataTableCell getContent={(x) => `$${x.product.price}`}/>
@@ -28,7 +28,7 @@ const Invoice = ({ order }) => (
                     <DataTableCell getContent={(x) => x.product.brand}/>
                     <DataTableCell getContent={(x) => x.product.color}/>
                 </TableBody>
-            </Table> */}
+            </Table>
 
             <Text style={styles.text}>
                 <Text>Date: {new Date(order.paymentIntent.created * 1000).toLocaleString()}</Text>
