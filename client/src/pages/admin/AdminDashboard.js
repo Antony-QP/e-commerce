@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import AdminNav from "../../components/nav/AdminNav";
 import { getOrders, changeStatus } from "../../actions/admin"
 import { useSelector, useDispatch } from 'react-redux'
-import { toast } from "react-toastify"
+import { toast } from "react-toastify";
+import Orders from '../../components/order/Orders';
 
 
 export const AdminDashboard = () => {
@@ -36,7 +37,7 @@ export const AdminDashboard = () => {
           <AdminNav />
         </div>
         <h4>Admin Dashboard</h4>
-        {JSON.stringify(orders)}
+        <Orders orders={orders} handleStatusChange={handleStatusChange} />
       </div>
     </div>
   );
