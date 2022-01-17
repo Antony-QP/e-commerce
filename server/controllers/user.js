@@ -151,7 +151,7 @@ exports.getOrders = async(req, res) => {
 
 exports.addToWishlist = async(req, res) => {
   const {productId} = req.body
-  const user = await User.findOneAndUpdate({ email: req.user.email}, {$addToSet : {wishList: productId}}).exec()
+  const user = await User.findOneAndUpdate({ email: req.user.email}, {$addToSet : {wishlist: productId}}).exec();
 
   res.json({ ok: true });
 }
