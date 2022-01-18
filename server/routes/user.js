@@ -17,8 +17,8 @@ router.post('/user/cart/coupon', authCheck, applyCouponToUserCart)
 
 // Wishlist
 
-router.post('user/wishlist', authCheck, addToWishlist)
-router.get('user/wishlist', authCheck, wishlist)
-router.put('user/wishlist/:productId', authCheck, removeFromWishlist)
+router.post('/user/wishlist', authCheck, addToWishlist)
+router.get('/user/wishlist', authCheck, wishlist)
+router.put('/user/wishlist/:productId', authCheck, removeFromWishlist)
 
 module.exports = router
